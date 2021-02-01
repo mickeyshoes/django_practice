@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        function getInfo(){
+            var url = {% url 'main:response_info' %};
+            fetch(url)
+            .then((response) => response.json())
+            .then((json) => {
+                console.log(json)
+                var tag = document.getElementById("testTag");
+                tag.innerHTML = json;
+            })
+            .catch(error => console.log("error : ",error))
+        };
+
+        function sendInfo(){
+            var name = document.getElementById("testTag").innerHTML;
+            console.log(typeof name, ":", name);
+
+            var url = {% url 'main:return_info' %};
+            var data = {'value' : name , 'csrfmiddlewaretoken':'{{ csrf_token }}'};
+            console.log(JSON.stringify(data));
+            fetch(url, {
+                method : "POST",
+                body : JSON.stringify(data),
+                credentials : 'same-origin',
+                headers : {
+                    'Content-Type' : 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+                console.log(json);
+                var tag = document.getElementById("testTag");
+                tag.innerHTML += JSON.stringify(json);
+            })
+            .catch(error => console.log("error : ", error))
+        };
+
+
+    </script>
+</head>
+<body>
+    <h1>hello</h1>
+    <h2>world</h2>
+    <button onclick="getInfo();">django 에서 값 가져오기</button>
+    <button onclick="sendInfo();">html 에서 값 보내기</button>
+    <p id="testTag"></p>
+</body>
+</html>
