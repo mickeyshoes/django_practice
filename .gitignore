@@ -3,6 +3,14 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+django_secret_key.py
+django_venv/
+
 # C extensions
 *.so
 
